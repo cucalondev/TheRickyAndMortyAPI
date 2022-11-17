@@ -1,48 +1,43 @@
 <template>
     <Buscador v-model:valor="name" />
-    <button @click="obtenerPersonajes()">Obtener</button>
-      <button @click="infoPersonaje(name)">Info</button>
+        Status:<SelectStatus @enviarStatus="statusRecibido"/>
+      <button @click="infoPersonaje(name,status)">Buscar</button>
     <Personaje :personajeSelected="personajeSelected"/>
 </template>
 <script>
 import axios from "axios";
 import Buscador from "../components/Buscador.vue";
 import Personaje from "../components/Personaje.vue";
+import SelectStatus from "../components/SelectStatus.vue";
 export default {
 name: "App",
 data() {
 return {
 name:"",
 personajes:[],
-personajeSelected:null
+personajeSelected:null,
+status:""
     };
 },
 components:{
     Buscador,
     Personaje,
+    SelectStatus
     },
 methods:{
-    obtenerPersonajes(){
+    infoPersonaje(name,status){
       axios
-      .get(`https://rickandmortyapi.com/api/character`)
-        .then((personajes) => {
-          console.log(personajes);
-          this.personajes=personajes.data.results;
-          this.personajeSelected=null;
-        })
-        .catch((e) => console.log(e))
-        .finally(() => this.loading = false);
-    },
-    infoPersonaje(name){
-      console.log(name);
-      axios
-      .get(`https://rickandmortyapi.com/api/character/?name=${name}&page=1`)
+      .get(`https://rickandmortyapi.com/api/character/?name=${name}&status=${status}`)
         .then((personaje) => {
+          console.log(personaje);
           this.personajeSelected=personaje.data.results;
         })
         .catch((e) => console.log(e))
         .finally(() => this.loading = false);
     },
+    statusRecibido(data){
+      this.status=data;
+    }
 },
 computed: {
      personajesFilter: function() {

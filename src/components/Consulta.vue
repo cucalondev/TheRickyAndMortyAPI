@@ -1,18 +1,26 @@
 <template>
     <Buscador v-model:valor="name" />
         Status:<SelectStatus @enviarStatus="statusRecibido"/>
-        Pagina:<SelectPage @enviarPagina="paginaRecibida"/>
-        <button @click="conseguirTodos(pagina)">Conseguir todos</button>
-      <button @click="infoPersonaje(name,status)">Buscar</button>
-    <Personaje :personajeSelected="personajeSelected"/>
+        <button @click="infoPersonaje(name,status),mostrar=false,this.name=''">Buscar</button><br><br>
+        <div v-if="pagina<42">
+        <button @click="siguientePagina(pagina),conseguirTodos(pagina),mostrar=true">Siguiente</button>
+      </div>
+        <div v-if="pagina>1">
+        <button @click="anteriorPagina(pagina),conseguirTodos(pagina),mostrar=true">Anterior</button>
+      </div>
+      Usted se encuentra en la página:{{pagina}}<br><br>
+        <div v-if="mostrar">
     <Personaje :personajeSelected="personajes"/>
+    </div>
+    <div v-else>
+          <Personaje :personajeSelected="personajeSelected"/>
+    </div>
 </template>
 <script>
 import axios from "axios";
 import Buscador from "../components/Buscador.vue";
 import Personaje from "../components/Personaje.vue";
 import SelectStatus from "../components/SelectStatus.vue";
-import SelectPage from "../components/SelectPage.vue";
 export default {
 name: "App",
 data() {
@@ -21,14 +29,14 @@ name:"",
 personajes:[],
 personajeSelected:null,
 status:"",
-pagina:0
+pagina:0,
+mostrar:false
     };
 },
 components:{
     Buscador,
     Personaje,
     SelectStatus,
-    SelectPage,
     },
 methods:{
   conseguirTodos(page){
@@ -44,17 +52,22 @@ methods:{
       axios
       .get(`https://rickandmortyapi.com/api/character/?name=${name}&status=${status}`)
         .then((personaje) => {
+          console.log(personaje);
           this.personajeSelected=personaje.data.results;
         })
         .catch((e) => console.log(e))
         .finally(() => this.loading = false);
     },
     statusRecibido(data){
+      this.pagina=pagina;
       this.status=data;
       
     },
-    paginaRecibida(data){
-      this.pagina=data;
+    siguientePagina(pagina){
+      this.pagina+=1;
+    },
+    anteriorPagina(pagina){
+      this.pagina-=1;
     }
 },
 computed: {

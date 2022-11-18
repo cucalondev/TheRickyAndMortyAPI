@@ -1,33 +1,33 @@
 <template>
     <div class="input-field">
-    <select @click="enviaStatus" ref="seleccionado">
+    <select @click="enviaPagina" ref="seleccionado">
         <option v-for="elemento in elementos" v-bind:key="elemento.otrasPropiedades">{{elemento.text}}</option>
     </select>
     </div>
 </template>
 <script>
 export default {
-    name:"SelectStatus",
+    name:"SelectPage",
     data:()=>{
         return{
         elementos: [{
         value: 0,
-        text: 'Seleccionar status...'
+        text: 'Seleccionar página...'
       },
       {
-        value: "alive",
-        text: 'Alive'
+        value: 1,
+        text: '1'
       },
       {
-        value: "dead",
-        text: 'Dead'
+        value: 2,
+        text: '2'
       },
     ]}},
-    emits:['enviarStatus'],
+    emits:['enviarPagina'],
     methods:{
-        enviaStatus(){
-            this.status = this.$refs.seleccionado.value;
-            this.$emit("enviarStatus",this.status);
+        enviaPagina(){
+            this.pagina = this.$refs.seleccionado.value;
+            this.$emit("enviarPagina",this.pagina);
         }
     }
     }

@@ -22,6 +22,10 @@ export default {
         value: "dead",
         text: 'Dead'
       },
+      {
+      value: "unknow",
+        text: 'Unknow'
+      },
     ]}},
     emits:['enviarStatus'],
     methods:{

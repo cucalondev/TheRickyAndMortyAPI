@@ -1,7 +1,7 @@
 <template>
     <Buscador v-model:valor="name" />
         Status:<SelectStatus @enviarStatus="statusRecibido"/>
-        <button @click="infoPersonaje(name,status),mostrar=false,this.name=''">Buscar</button><br><br>
+        <button @click="infoPersonaje(name),infoPersonaje(name,status),mostrar=false">Buscar</button><br><br>
         <div v-if="pagina<42">
         <button @click="siguientePagina(pagina),conseguirTodos(pagina),mostrar=true">Siguiente</button>
       </div>
@@ -33,6 +33,11 @@ pagina:0,
 mostrar:false
     };
 },
+mounted(){
+  this.conseguirTodos(1);
+  this.mostrar=true;
+  this.pagina=1;
+},
 components:{
     Buscador,
     Personaje,
@@ -48,6 +53,16 @@ methods:{
         .catch((e) => console.log(e))
         .finally(() => this.loading = false);
     },
+    infoPersonaje(name){
+      axios
+      .get(`https://rickandmortyapi.com/api/character/?name=${name}`)
+        .then((personaje) => {
+          console.log(personaje);
+          this.personajeSelected=personaje.data.results;
+        })
+        .catch((e) => console.log(e))
+        .finally(() => this.loading = false);
+    },
     infoPersonaje(name,status){
       axios
       .get(`https://rickandmortyapi.com/api/character/?name=${name}&status=${status}`)
@@ -59,7 +74,6 @@ methods:{
         .finally(() => this.loading = false);
     },
     statusRecibido(data){
-      this.pagina=pagina;
       this.status=data;
       
     },
@@ -68,7 +82,7 @@ methods:{
     },
     anteriorPagina(pagina){
       this.pagina-=1;
-    }
+    },
 },
 computed: {
      personajesFilter: function() {

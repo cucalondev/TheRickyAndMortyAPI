@@ -1,7 +1,6 @@
 <template>
     <!-- component -->
     <div class="w-full sm:max-w-md p-5 mx-auto">
-    <h2 class="mb-12 text-center text-5xl font-extrabold">The Rick and Morty</h2>
     <div class="mb-4">
     <label class="block mb-1" for="personaje">Introduce el Personaje</label>
     <input

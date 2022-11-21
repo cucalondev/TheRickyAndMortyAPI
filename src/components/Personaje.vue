@@ -11,7 +11,8 @@
       {{el.name}}
     </h4>
     <p class="mb-2 text-sm leading-normal text-justify text-sky-900">
-      Status:{{el.status}}
+      Status:{{el.status}}<br>
+      Location:<br>{{el.location.name}}
     </p>
   </div>
 </div>

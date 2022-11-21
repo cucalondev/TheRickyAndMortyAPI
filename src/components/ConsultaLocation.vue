@@ -1,36 +1,44 @@
 <template>
+  <Buscador v-model:valor="localidad"/>
+  <button @click="mostrar=true">Localidades</button>
+  <div v-if="mostrar">
         <ol>
         <li v-for="el of localidades" v-bind:key="el.id">
           {{el.name}} 
-          <ol>
-            <li v-for="p of el.residents" v-bind:key="p.id">
-              {{conseguirPersonaje(p)}}
-            </li>
-          </ol>
           </li>
-      </ol>
-      <label>Residentes</label>
-      <ol>
-        <li v-for="el of residentes" v-bind:key="el.id">
-           <p>Hola</p>
-        </li>
-      </ol>
+        </ol>
+      </div>
       <button @click="siguientePagina(pagina),conseguirLocalidades(pagina)">Siguiente</button>
       <button @click="atrasPagina(pagina),conseguirLocalidades(pagina)">Atras</button>
+        <button @click="conseguirResidentes(localidad,pagina),mostrar=false">Residentes</button>
+      <div v-if="!mostrar">
+        <ol>
+          <li v-for="el of residentes" v-bind:key="el.id">
+            {{el.name}}
+            Localidad:{{el.location.name}}
+          </li>
+        </ol>
+      </div>
       <br>
 </template>
 <script>
 import axios from "axios";
+import Buscador from "../components/Buscador.vue";
 export default {
 data() {
 return {
 localidades:[],
+localidad:"",
 residentes:[],
-pagina:0
+pagina:0,
+mostrar:false
     };
 },
 mounted(){
 this.conseguirLocalidades(1)
+},
+components:{
+  Buscador,
 },
 methods:{
   conseguirLocalidades(page){
@@ -42,12 +50,12 @@ methods:{
         .catch((e) => console.log(e))
         .finally(() => this.loading = false);
     },
-    conseguirPersonaje(personaje){
+    conseguirResidentes(location,page){
       axios
-      .get(personaje)
+      .get(`https://rickandmortyapi.com/api/character/?location=${location}&page=${page}`)
         .then((personaje) => {
-          console.log(personaje);
           this.residentes=personaje.data.results;
+          console.log(this.residentes);
         })
         .catch((e) => console.log(e))
         .finally(() => this.loading = false);

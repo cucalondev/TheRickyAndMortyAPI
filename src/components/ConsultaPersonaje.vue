@@ -86,7 +86,7 @@ methods:{
 },
 computed: {
      personajesFilter: function() {
-      let texto = this.nombrePersonaje;
+      let texto = this.name;
        return this.personajes.filter(function(el) {
          return el.name.toLowerCase().indexOf(texto.toLowerCase()) !== -1;
        });

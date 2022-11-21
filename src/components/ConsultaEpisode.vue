@@ -5,12 +5,12 @@
     <div v-if="pagina>0">
     <button @click="anterior(),conseguirEpisodios(pagina)">Anterior</button>
 </div>
-        <div v-for="el of episodios" v-bind:key="el.id">
-            {{el.name}}<br>
-            </div>
+
+        <item-episodio v-for="el of episodios" :episode="el" v-bind:key="el.id"></item-episodio>
 </template>
 <script>
 import axios from "axios";
+import ItemEpisodio from "./ItemEpisodio.vue";
 export default {
     name:"ConsultaEpisode",
     data(){
@@ -19,6 +19,9 @@ export default {
             episodios:[],
             personajes:[]
         }
+    },
+    components: {
+        ItemEpisodio
     },
     mounted(){
         this.conseguirEpisodios(1);
@@ -39,9 +42,6 @@ export default {
     anterior(){
         this.pagina-=1;
     },
-    añadirPersonajes(){
-        this.personajes.push(personaje)
-    }
     }
 }
 

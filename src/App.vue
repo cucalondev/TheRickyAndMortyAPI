@@ -1,49 +1,54 @@
 <template>
- <ReadFile texto="Elige un fichero" @carga="cargaFichero"/>
- <p v-if="numeroInCorrecto">No es un número par</p>
-  <ul >
-    <li v-for="(el,key) in fichero" :key="key"> {{ el[0] }}- {{ el[1] }} </li>
-  </ul>
-  
+    <h2 class="mb-12 text-center text-5xl font-extrabold">The Rick and Morty</h2>
+    <button @click="showPersonajes = !showPersonajes">Personajes</button>
+    <button @click="showLocalidades = !showLocalidades">Localidades</button>
+    <button @click="showEpisodios = !showEpisodios">Episodios</button>
+  <div v-if="showPersonajes ">
+    {{ocultarLocalidades()}}
+    {{ocultarEpisodios()}}
+  <ConsultaPersonaje/>
+  </div>
+  <div v-if="showLocalidades">
+    {{ocultarPersonajes()}}
+    {{ocultarEpisodios()}}
+  <ConsultaLocation/>
+</div>
+<div v-if="showEpisodios">
+  {{ocultarLocalidades()}}
+  {{ocultarPersonajes()}}
+  <ConsultaEpisode/>
+</div>
 </template>
-
 <script>
-import ReadFile from "@/components/ReadFile.vue";
-
+import ConsultaPersonaje from "./components/ConsultaPersonaje.vue";
+import ConsultaLocation from "./components/ConsultaLocation.vue";
+import ConsultaEpisode from "./components/ConsultaEpisode.vue";
 export default {
+  data(){
+    return{
+      showPersonajes:false,
+      showLocalidades:false,
+      showEpisodios:false
+    }
+  },
   components:{
-    ReadFile,
+    ConsultaPersonaje,
+    ConsultaLocation,
+    ConsultaEpisode,
   },
-  name:"App",
-  data() {
-    return {
-      fichero:[],
-      numeroInCorrecto: false, 
+  methods:{
+    ocultarPersonajes(){
+      console.log('ocultando');
+      this.showPersonajes=false;
+    },
+    ocultarLocalidades(){
+      this.showLocalidades=false;
+    },
+    ocultarEpisodios(){
+      this.showEpisodios=false;
     }
-  },
-  methods: {
-    cargaFichero(fich) {
-      //Pasamos la cadena de caracteres del fichero obtenido a un array
-      let auxiliar =  fich
-        .toString()
-        .trim()
-        .split('\n')
-      //Si el número de elementos no es par, no podemos continuar
-      if (auxiliar.length%2==0) {
-        this.numeroIncorrecto = false;
-        //Realizamos el emparejamiento aleatorio
-        this.fichero = auxiliar
-          .sort(()=> Math.random() - 0.5)
-          .map((el,idx,arr)=>  (idx % 2 == 1) ? [el,arr[idx-1]]: null)
-          .filter( el => el !== null);
-      } else {
-        //No ha sido un número correcto
-        this.numeroInCorrecto = true;
-        this.fichero=[];
-      };
-    }
-        
-  }, 
-};
+  }
+}
 </script>
-
+<style>
+</style>
